@@ -26,7 +26,7 @@ namespace MarkdownViewer
         private ArrayList controls = new ArrayList();
 
         /// <summary>
-        /// 载入插件
+        /// Load the plugin
         /// </summary>
         /// <param name="fileToLoad"></param>
         /// <param name="showFlags"></param>
@@ -42,7 +42,7 @@ namespace MarkdownViewer
 
                 TraceProc(System.Diagnostics.TraceLevel.Info, "fileName: " + fileName + ", ext: " + ext);
 
-                // 如果文件扩展名不在支持之列则直接返回
+                // If the file extension is not supported, return directly
                 if (AllowedExtensions.IndexOf(ext, StringComparison.InvariantCultureIgnoreCase) < 0)
                 {
                     return null;
@@ -50,8 +50,8 @@ namespace MarkdownViewer
 
                 viewerControl = new ViewerControl(this);
                 viewerControl.FileLoad(fileToLoad);
-                FocusedControl = viewerControl.webBrowser1;
-                viewerControl.Focus();
+                //FocusedControl = viewerControl.webBrowser1;
+                //viewerControl.Focus();
 
                 controls.Add(viewerControl);
              
@@ -69,7 +69,5 @@ namespace MarkdownViewer
         {
             controls.Remove(control);
         }
-      
     }
-
 }

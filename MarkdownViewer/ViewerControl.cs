@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.IO;
 using Markdig;
 using OY.TotalCommander.TcPluginInterface.Lister;
+using System.Linq;
 
 namespace MarkdownViewer
 {
@@ -16,15 +17,17 @@ namespace MarkdownViewer
             "  <meta charset=\"utf-8\">" +
             "  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" />" +
             "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=yes\">" +
-            "  <style type=\"text/css\">code{{white-space: pre;}}</style>" +
-            "  <style type=\"text/css\">" +
+            "  <style>" +
             "   {1}" +
             "  </style>" +
+            "  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css\" />" + 
             "</head>" +
             "<body>" +
             "<article class=\"markdown-body\">" +
             "{0}" +
             "</article>" +
+            "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js\"></script>" +
+            "<script>hljs.initHighlightingOnLoad();</script>" +
             "</body>" +
             "</html>";
 
@@ -44,9 +47,9 @@ namespace MarkdownViewer
                 String markdownContent = sr.ReadToEnd();
                 var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
                 String markdownHTML = Markdown.ToHtml(markdownContent, pipeline);
-                String style = Properties.Resources.github_markdown2;
+                String style = Properties.Resources.styles;
                 String html = String.Format(CONTAINER_HTML, markdownHTML, style);
-                this.webBrowser1.DocumentText = html;
+                webBrowser1.DocumentText = html;
             }
         }
 
@@ -57,10 +60,10 @@ namespace MarkdownViewer
 
         private void MyKeyPressHandler(object sender, HtmlElementEventArgs e)
         {
-            // 处理Esc键失效问题
-            if (e.KeyPressedCode == 27)
+            int[] keys = new int[] { 27, 49, 50, 51, 52, 53, 54, 55 }; // Esc, 1-7
+            if (keys.Contains(e.KeyPressedCode))
             {
-                listerPlugin.SendKeyToParentWindow(27);
+                listerPlugin.SendKeyToParentWindow(e.KeyPressedCode);
             }
         }
     }
